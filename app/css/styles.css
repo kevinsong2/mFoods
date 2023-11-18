@@ -1,0 +1,64 @@
+h1{
+    color:black;
+    font-family: 'Ariel', sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    position: absolute;
+    top: 0px;
+    left: 10px;
+
+
+}
+
+form{
+    position: absolute;
+    top: 256px;
+    left: 768px;
+}
+
+
+.button {
+    background-color:  #ff0000;
+    position: absolute;
+    top: 256px;
+    left: 256px;
+    border:none;
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+} 
+
+
+/* #tabs-1{
+    
+    /* Add your styles for tabs-3 here 
+    color: purple;
+    font-size: 20px;
+    /* Add more styles as needed 
+
+
+}*/
+
+/* #tabs-2{
+
+    /* Add your styles for tabs-3 here 
+    color: green;
+    font-size: 20px;
+    /* Add more styles as needed 
+    
+}*/
+
+
+/* #tabs-3{
+
+    /* Add your styles for tabs-3 here 
+    color: red;
+    font-size: 20px;
+    /* Add more styles as needed 
+
+} */
+

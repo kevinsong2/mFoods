@@ -41,6 +41,30 @@ $(function() {
         }
 
         function getRecipe(item, image) { 
+          // Create HTML content for each title
+          const title = `<h5 class="card-title recipe-title" data-id="${item.id}">${item.title}</h5>`;
+          $('#main-container').append(title);
+          
+          // Add click event handler for each title
+          $(`.recipe-title[data-id="${item.id}"]`).on("click", function() {
+            $('#detail-container').empty();
+            // Generate details content and append it to the detail container
+            const details = `
+            <div class="card" style="width: 18rem;">
+              <h5 class="card-title" id="recipeName">${item.title}</h5>
+              <img class="card-img-top" id="image" src="${image}" alt="Card image cap" />
+              <button id="${item.id}" type="button" class="btn btn-warning">PICK THIS RECIPE</button>
+              <div class="card-body">
+                <p class="card-text" id="recipe">${item.summary}</p>
+              </div>
+          </div>
+          <div id="tabs">
+                <!-- ... (content for tabs) ... -->
+            </div>
+        `;
+        $('#detail-container').append(details);
+    });
+
           let details = item.extendedIngredients;
     
           let getAmount = details.map(ingAmt => {
