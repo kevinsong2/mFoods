@@ -6,6 +6,14 @@ $(function() {
         e.preventDefault();
         loading();
         
+        //Get user input form #search-bar
+        const userInput = $('#search-bar').val();
+
+        //Append the input to a list element
+        const listItem = '<li>${userInput}</li>';
+        $('#ingredient-list').append(listItem);
+
+
         async function getFood() {
           const response = await fetch(
             `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${
