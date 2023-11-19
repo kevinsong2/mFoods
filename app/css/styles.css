@@ -50,8 +50,8 @@ form{
     font-weight: 100;
     line-height: normal;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 535px;
+    left: 300px;
 }
       
 #currentIN{
@@ -81,7 +81,7 @@ form{
     width: 1px;
     height: 100%;
     top: 0;
-    left: 200px; /* Adjust the left position as needed */
+    left: 300px; /* Adjust the left position as needed */
   }
 
   /* SCREEN IS 1920 x 955 */
