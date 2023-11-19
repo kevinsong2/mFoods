@@ -72,16 +72,6 @@ def test_model(model, test_loader):
             y_score.extend(nn.functional.softmax(outputs.data, dim=1))
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-
-    # with torch.no_grad():
-    #     for inputs, labels in test_loader:
-    #         outputs = model(inputs)
-    #         y_true.extend(labels)
-    #         predicted = torch.argmax(outputs.data, dim=1)
-    #         y_pred.extend(predicted)
-    #         y_score.extend(nn.functional.softmax(outputs.data, dim=1))
-    #         total += labels.size(0)
-    #         correct += (predicted == labels).sum().item()
     
     auroc = metrics.roc_auc_score(y_true, y_score, multi_class="ovo")
     accuracy = 100 * (correct / total)
@@ -105,4 +95,4 @@ if __name__ == "__main__":
         print("no pretrained model")
         model = build_model(num_classes)
         train_model(model, train_dataloader)
-    test_model(model, train_dataloader)
+    test_model(model, test_dataloader)

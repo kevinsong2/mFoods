@@ -1,42 +1,51 @@
 // Spoonacular API key but this should be somehow hidden. Need to fix this for security purposes
-const apiKey = 'c07aa86ecf084405b55efbf79ac910a5';
+const apiKey = '5e45438246d347e4acb37e0467714802';
 console.log("connected")
 $(function() {
-  $('#imageInput').on('change', function(event) {
-    var file = event.target.files[0];
-    if (!file.type.match('image.*')) {
-        alert('Please select an image file.');
-        return;
-    }
-
-    var formData = new FormData();
-    formData.append('file', file); // Append the file to FormData
-
-    fetch('/views/model/upload', { // Adjust this URL to your Flask route
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+    $('#imageInput').on('change', function(event) {
+        var file = event.target.files[0];
+        if (!file.type.match('image.*')) {
+            alert('Please select an image file.');
+            return;
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Prediction received", data);
-        displayPredictedIngredients(data.prediction, data.ingredients);
-    })
-    .catch(error => console.error('Error during fetch:', error));
-  });
+
+        var formData = new FormData();
+        formData.append('file', file); // Append the file to FormData
+
+        fetch('/upload', { // Adjust this URL to your Flask route
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayPredictedIngredients(data.prediction, data.ingredients);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    $('form').on("submit", function(e) {
+        e.preventDefault();
+        loading();
+
+        // Recognizes commas and trims spaces to put them into separate lists
+        const userInput = $('#search-bar').val();
+        const ingredientsArray = userInput.split(',');
+        ingredientsArray.forEach(ingredient => {
+          const listItem = `<li>${ingredient.trim()}</li>`;
+          $('#ingredient-list').append(listItem);
+        });
+
+        removeLoading();
+    });
 
     function displayPredictedIngredients(prediction, ingredients) {
-      var ingredientsList = `<h3>Predicted Recipe: ${prediction}</h3><ul>`;
-      ingredients.forEach(function(ingredient) {
-          ingredientsList += `<li>${ingredient}</li>`;
-      });
-      ingredientsList += '</ul>';
-      
-      $('#recipeOp').html(ingredientsList);
+        var ingredientsList = `<h3>Predicted Recipe: ${prediction}</h3><ul>`;
+        ingredients.forEach(function(ingredient) {
+            ingredientsList += `<li>${ingredient}</li>`;
+        });
+        ingredientsList += '</ul>';
+    
+        $('#recipeOp').html(ingredientsList);
     }
     
     $('form').on("submit", function(e){
@@ -89,12 +98,6 @@ $(function() {
           // Create HTML content for each title
           const title = `<h5 class="card-title recipe-title" data-id="${item.id}">${item.title}</h5>`;
           $('#recipeTitle-list').append(title);  //appending to list made in html
-          $(title).on("click", function() {
-            window.open(
-            `https://api.spoonacular.com/recipes/${item.id}/information?apiKey=${apiKey}`,
-            '_blank' 
-            );
-        });
         
         // $('#recipeTitle-list').append(title); // THIS HERE is causing double
           let details = item.extendedIngredients;
@@ -158,6 +161,13 @@ $(function() {
 });
 
 
+
+
+
+
+
+
+
 function loading (){
     $(".container").append("<div class = 'loading'><img src= 'static/images/loading.gif'></div>")
 } 
@@ -165,51 +175,3 @@ function loading (){
 function removeLoading (){
     $(".loading").remove();
 }
-
-
-// console.log("connected")
-// $(function() {
-//     $('form').on("submit", function(e) {
-//         e.preventDefault();
-//         loading();
-
-//         // Recognizes commas and trims spaces to put them into separate lists
-//         const userInput = $('#search-bar').val();
-//         const ingredientsArray = userInput.split(',');
-//         ingredientsArray.forEach(ingredient => {
-//             const listItem = `<li>${ingredient.trim()}</li>`; // trim to remove extra spaces
-//             $('#ingredient-list').append(listItem);
-//         });
-
-//         const title = `<h5 class="card-title recipe-title" data-id="hello">TESTING WORLD</h5>`;
-//         $('#recipeTitle-list').append(title);  //appending to list made in html
-//         // Simulate recipe display without calling the API
-//         displayRecipe();
-
-//         removeLoading();
-//     });
-// });
-
-// function displayRecipe() {
-//     const recipeTitle = "Testing for Recipes";
-//     const image = "path_to_default_image.jpg"; // Replace with a default image path
-//     const recipeSummary = "This is a test summary for the recipe.";
-
-//     const recipe = `
-//         <div class="card" style="width: 18rem;">
-//             <h5 class="card-title" id="recipeName">${recipeTitle}</h5>
-//             <img class="card-img-top" id="image" src="${image}" alt="Card image cap" />
-//             <div class="card-body">
-//                 <p class="card-text" id="recipe">${recipeSummary}</p>
-//             </div>
-//         </div>`;
-//     $('#recipeOp').append(recipe);
-// }
-
-// function loading() {
-//     $(".container").append("<div class = 'loading'><img src= 'static/images/loading.gif'></div>")
-// }
-
-// function removeLoading() {
-//     $(".loading").remove();
-// }
