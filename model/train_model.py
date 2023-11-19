@@ -32,10 +32,10 @@ def build_model(num_classes):
     model.fc = nn.Linear(num_features, num_classes)
     return model
 
-def train_model(model, dataloader, epochs=12):
+def train_model(model, dataloader, epochs=8):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+    # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
     for epoch in range(epochs):
         model.train()
@@ -49,7 +49,7 @@ def train_model(model, dataloader, epochs=12):
             optimizer.step()
             running_loss += loss.item()
 
-        scheduler.step()
+        # scheduler.step()
         print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss / len(dataloader)}")
 
     torch.save(model.state_dict(), 'trained_model.pt')
@@ -91,10 +91,18 @@ if __name__ == "__main__":
     train_data_dir = './app/static/train-data'
     test_data_dir = './app/static/test-data'
     num_classes = 3 # Update this based on your dataset
+    premodel = "trained_model.pt"
 
     train_dataloader = load_data(train_data_dir, train=True)
     test_dataloader = load_data(test_data_dir, train=False)
 
-    model = build_model(num_classes)
-    train_model(model, train_dataloader)
-    test_model(model, test_dataloader)
+    if os.path.exists(premodel):
+        model = build_model(num_classes)
+        model.load_state_dict(torch.load(premodel))
+        model.eval()
+        # train_model(model, train_dataloader)
+    else:
+        print("no pretrained model")
+        model = build_model(num_classes)
+        train_model(model, train_dataloader)
+    test_model(model, train_dataloader)

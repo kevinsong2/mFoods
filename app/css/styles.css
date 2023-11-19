@@ -57,7 +57,7 @@ form{
     font-weight: 100;
     list-style: none;
     line-height: normal;
-    text-align: left;
+    text-align: center;
     position: absolute;
     top: 52%;
     left: 25%;
@@ -71,7 +71,7 @@ form{
     font-weight: 100;
     list-style: none;
     line-height: normal;
-    text-align: left;
+    text-align: center;
     position: absolute;
     top: 55%;
     left: 67%;
@@ -99,6 +99,9 @@ form{
     
 }
 
+#recipeOp {
+    display: none;
+}
 
 /* DELETE AT THE END: GRID */
 .horizontal-line, .vertical-line {
