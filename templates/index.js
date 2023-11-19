@@ -6,65 +6,50 @@ $(function() {
         e.preventDefault();
         loading();
         
-        // async function getFood() {
-        //   const response = await fetch(
-        //     `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${
-        //       $('#search-bar').val()
-        //     }&number=20&apiKey=${apiKey}`
-        //   );
-        //   if (!response.ok) {
-        //     throw new Error(`HTTP error! status: ${response.status}`);
-        //   }
-        //   const items = await response.json(); // the JSON body content.
-        //   console.log(items);
-        //   removeLoading();
+        //!!<<Making the "Current Ingredients BOX">>!!//
+        //Get user input form #search-bar
+        const userInput = $('#search-bar').val();
+
+        //Append the input to a list element
+        const listItem = `<li>${userInput}</li>`;
+        $('#ingredient-list').append(listItem);
+
+         //!!<<Calling the Food Ingredients Function>>!!//
+        async function getFood() {
+          const response = await fetch(
+            `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${
+              $('#search-bar').val()
+            }&number=20&apiKey=${apiKey}`
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const items = await response.json(); // the JSON body content.
+          console.log(items);
+          removeLoading();
         //   displayFirstRecipe(items); // Remove this later
           foodID(items);
-        // }
+        }
     
-        // function foodID(items) {
-        //   items.forEach((item, i) => {
-        //       fetch(`https://api.spoonacular.com/recipes/${item.id}/information?apiKey=${apiKey}`)
-        //         .then(data => data.json()).then(recipe => getRecipe(recipe, item.image));
+        function foodID(items) {
+          items.forEach((item, i) => {
+              fetch(`https://api.spoonacular.com/recipes/${item.id}/information?apiKey=${apiKey}`)
+                .then(data => data.json()).then(recipe => getRecipe(recipe, item.image));
                 
-        //     });
-        // }
+            });
+        }
         
         // TEMP FUNCTION TO TEST
-        // function displayFirstRecipe(items) {
-        //     if (items.length > 0) {
-        //         const firstItem = items[0];
-        //         fetch(`https://api.spoonacular.com/recipes/${firstItem.id}/information?apiKey=${apiKey}`)
-        //             .then(data => data.json())
-        //             .then(recipe => getRecipe(recipe, firstItem.image));
-        //     }
-        // }
+        function displayFirstRecipe(items) {
+            if (items.length > 0) {
+                const firstItem = items[0];
+                fetch(`https://api.spoonacular.com/recipes/${firstItem.id}/information?apiKey=${apiKey}`)
+                    .then(data => data.json())
+                    .then(recipe => getRecipe(recipe, firstItem.image));
+            }
+        }
 
         function getRecipe(item, image) { 
-          // Create HTML content for each title
-          const title = `<h5 class="card-title recipe-title" data-id="${item.id}">${item.title}</h5>`;
-          $('#main-container').append(title);
-          
-          // Add click event handler for each title
-          $(`.recipe-title[data-id="${item.id}"]`).on("click", function() {
-            $('#detail-container').empty();
-            // Generate details content and append it to the detail container
-            const details = `
-            <div class="card" style="width: 18rem;">
-              <h5 class="card-title" id="recipeName">${item.title}</h5>
-              <img class="card-img-top" id="image" src="${image}" alt="Card image cap" />
-              <button id="${item.id}" type="button" class="btn btn-warning">PICK THIS RECIPE</button>
-              <div class="card-body">
-                <p class="card-text" id="recipe">${item.summary}</p>
-              </div>
-          </div>
-          <div id="tabs">
-                <!-- ... (content for tabs) ... -->
-            </div>
-        `;
-        $('#detail-container').append(details);
-    });
-
           let details = item.extendedIngredients;
     
           let getAmount = details.map(ingAmt => {
@@ -126,7 +111,7 @@ $(function() {
 });
 
 function loading (){
-    $(".container").append("<div class = 'loading'><img src= 'static/images/loading.gif'></div>")
+    $(".container").append("<div class = 'loading'><img src= 'app/static/images/loading.gif'></div>")
 } 
   
 function removeLoading (){

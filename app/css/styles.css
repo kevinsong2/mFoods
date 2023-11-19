@@ -1,19 +1,29 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
 h1{
-    color:black;
-    font-family: 'Ariel', sans-serif;
-    font-size: 50px;
-    font-weight: bold;
+    color: #000;
+    font-family: Inter;
+    font-size: 70px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
     position: absolute;
     top: 0px;
-    left: 10px;
-
+    left: 0px;
+    box-sizing: border-box;
 
 }
 
 form{
     position: absolute;
-    top: 256px;
-    left: 768px;
+    top: 0px;
+    left: 0px;
 }
 
 
@@ -32,3 +42,47 @@ form{
     border-radius: 16px;
 } 
 
+#ingredient-list {
+    color: black;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: normal;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+      
+#currentIN{
+    color: black;
+    font-family: Inter;
+    font-size: 35px;
+    position: absolute;
+    top: 470px;
+    left: 200px;
+    
+}
+
+/* DELETE AT THE END: GRID */
+.horizontal-line, .vertical-line {
+    position: fixed;
+    background-color:red;
+  }
+  
+  .horizontal-line {
+    height: 1px;
+    width: 100%;
+    top: 470px;
+    left: 0;
+  }
+  
+  .vertical-line {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 200px; /* Adjust the left position as needed */
+  }
+
+  /* SCREEN IS 1920 x 955 */
+/* UP TO THIS POINT */
