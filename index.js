@@ -2,7 +2,7 @@
 const apiKey = 'c07aa86ecf084405b55efbf79ac910a5';
 console.log("connected")
 $(function() {
-  $('#imageInput').on('change', function(event) {
+  document.getElementById('imageInput').addEventListener('change', function(event) {
     var file = event.target.files[0];
     if (!file.type.match('image.*')) {
         alert('Please select an image file.');
@@ -12,22 +12,22 @@ $(function() {
     var formData = new FormData();
     formData.append('file', file); // Append the file to FormData
 
-    fetch('/views/model/upload', { // Adjust this URL to your Flask route
+    fetch('/upload', { // Make sure this URL matches your Flask route
         method: 'POST',
         body: formData
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+            throw new Error('Network response was not ok');
         }
         return response.json();
     })
     .then(data => {
-        console.log("Prediction received", data);
-        displayPredictedIngredients(data.prediction, data.ingredients);
+        // Call a function to display the ingredients
+        displayIngredients(data.ingredients);
     })
     .catch(error => console.error('Error during fetch:', error));
-  });
+});
 
     function displayPredictedIngredients(prediction, ingredients) {
       var ingredientsList = `<h3>Predicted Recipe: ${prediction}</h3><ul>`;

@@ -23,7 +23,7 @@ def transform_image(img):
     batch_tensor = transformed_img.unsqueeze(0)
     return batch_tensor
 
-@app.route('/upload', methods=['POST'])
+@app.route('/mode/views/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file'}), 400
