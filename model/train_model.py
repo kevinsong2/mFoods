@@ -81,7 +81,7 @@ if __name__ == "__main__":
     train_data_dir = './app/static/train-data'
     test_data_dir = './app/static/test-data'
     num_classes = 3 # Update this based on your dataset
-    premodel = "trained_model.pt"
+    premodel = "trained_model92.pt"
 
     train_dataloader = load_data(train_data_dir, train=True)
     test_dataloader = load_data(test_data_dir, train=False)

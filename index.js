@@ -2,7 +2,7 @@
 const apiKey = 'c07aa86ecf084405b55efbf79ac910a5';
 console.log("connected")
 $(function() {
-  document.getElementById('imageInput').addEventListener('change', function(event) {
+    document.getElementById('imageInput').addEventListener('change', function(event) {
     var file = event.target.files[0];
     if (!file.type.match('image.*')) {
         alert('Please select an image file.');
@@ -24,10 +24,29 @@ $(function() {
     })
     .then(data => {
         // Call a function to display the ingredients
-        displayIngredients(data.ingredients);
+        displayIngredients(data.output, data.ingredients);
     })
     .catch(error => console.error('Error during fetch:', error));
 });
+
+function displayIngredients(prediction, ingredients) {
+  // Create an HTML string for the prediction and ingredients
+  var contentHtml = '<h2>Prediction:</h2>';
+  contentHtml += `<p>Pasta</p>`;
+  contentHtml += '<h3>Ingredients:</h3><ul>';
+
+  // Add each ingredient to the HTML string
+  ingredients.forEach(function(ingredient) {
+      contentHtml += `<li>${ingredient}</li>`;
+  });
+
+  contentHtml += '</ul>';
+  
+  // Set the inner HTML of the recipeOp element to the combined content
+  $('#recipeOp').html(contentHtml);
+}
+
+
 
     function displayPredictedIngredients(prediction, ingredients) {
       var ingredientsList = `<h3>Predicted Recipe: ${prediction}</h3><ul>`;

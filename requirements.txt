@@ -1,3 +1,5 @@
 pip install torch
 pip install torchvision
 pip install flask-cors
+pip install scikit-learn
+pip install python-dotenv
