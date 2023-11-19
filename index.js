@@ -6,9 +6,13 @@ $(function() {
         e.preventDefault();
         loading();
         
+        // Recongizes commas and trims spaces to put them into seperate lists
         const userInput = $('#search-bar').val();
-        const listItem = `<li>${userInput}</li>`;
-        $('#ingredient-list').append(listItem);
+        const ingredientsArray = userInput.split(',');
+        ingredientsArray.forEach(ingredient => {
+          const listItem = `<li>${ingredient.trim()}</li>`; // trim to remove extra spaces
+          $('#ingredient-list').append(listItem);
+      });
         
         async function getFood() {
           const response = await fetch(
@@ -48,6 +52,7 @@ $(function() {
           // Create HTML content for each title
           const title = `<h5 class="card-title recipe-title" data-id="${item.id}">${item.title}</h5>`;
           $('#main-container').append(title);
+          $('#recipeTitle-list').append(title);  //appending to list made in html
           
           // Add click event handler for each title
           $(`.recipe-title[data-id="${item.id}"]`).on("click", function() {

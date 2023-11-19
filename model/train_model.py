@@ -2,12 +2,14 @@ import torch
 import torchvision
 from torchvision import datasets, transforms, models
 from torch import nn, optim
+
+from sklearn import metrics
 import os
 
 def load_data(data_dir, train=True):
     if train:
         transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize((256, 256)),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation(10),
             transforms.ToTensor(),
@@ -15,7 +17,7 @@ def load_data(data_dir, train=True):
         ])
     else:
         transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize((256, 256)),
             transforms.ToTensor(),
             transforms.Normalize((0.5,), (0.5,))
         ])
@@ -25,15 +27,14 @@ def load_data(data_dir, train=True):
     return dataloader
 
 def build_model(num_classes):
-    # Ensure you have the correct version of torchvision installed
     model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
     num_features = model.fc.in_features
     model.fc = nn.Linear(num_features, num_classes)
     return model
 
-def train_model(model, dataloader, epochs=10):
+def train_model(model, dataloader, epochs=12):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.003)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
 
     for epoch in range(epochs):
@@ -54,19 +55,37 @@ def train_model(model, dataloader, epochs=10):
     torch.save(model.state_dict(), 'trained_model.pt')
 
 def test_model(model, test_loader):
+    print("start test")
     model.eval()
     correct = 0
     total = 0
+    y_true = []
+    y_pred = []
+    y_score = []
 
     with torch.no_grad():
         for inputs, labels in test_loader:
             outputs = model(inputs)
-            _, predicted = torch.max(outputs.data, 1)
+            y_true.extend(labels)
+            predicted = torch.argmax(outputs.data, dim=1)
+            y_pred.extend(predicted)
+            y_score.extend(nn.functional.softmax(outputs.data, dim=1))
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+    # with torch.no_grad():
+    #     for inputs, labels in test_loader:
+    #         outputs = model(inputs)
+    #         y_true.extend(labels)
+    #         predicted = torch.argmax(outputs.data, dim=1)
+    #         y_pred.extend(predicted)
+    #         y_score.extend(nn.functional.softmax(outputs.data, dim=1))
+    #         total += labels.size(0)
+    #         correct += (predicted == labels).sum().item()
+    
+    auroc = metrics.roc_auc_score(y_true, y_score, multi_class="ovo")
     accuracy = 100 * (correct / total)
-    print(f'Accuracy of the model on test images: {accuracy}%')
+    print(f'Accuracy of the model on test images: {accuracy}% and a ROC AUC score: {auroc}')
 
 if __name__ == "__main__":
     train_data_dir = './app/static/train-data'
