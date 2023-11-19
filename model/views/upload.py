@@ -5,8 +5,11 @@ from io import BytesIO
 
 from flask import Flask, request, jsonify
 from model.train_model import build_model
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 # model = load_model('trained_model.pt', 3)  # Assuming load_model is defined
 model = build_model(num_classes=3)
 model.load_state_dict(torch.load("trained_model.pt"))

@@ -12,7 +12,7 @@ $(function() {
     var formData = new FormData();
     formData.append('file', file); // Append the file to FormData
 
-    fetch('/upload', { // Make sure this URL matches your Flask route
+    fetch('http://localhost:5000/model/views/upload', { // Make sure this URL matches your Flask route
         method: 'POST',
         body: formData
     })
