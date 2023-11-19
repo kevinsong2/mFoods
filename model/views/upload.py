@@ -14,19 +14,31 @@ CORS(app)
 model = build_model(num_classes=3)
 model.load_state_dict(torch.load("trained_model.pt"))
 
-def transform_image(img):
+def transform_image(img_stream):
     my_transforms = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])
 
-    image = Image.open(img).convert('RGB')
+    # img_stream is a file-like object (BytesIO stream)
+    image = Image.open(img_stream).convert('RGB')
     transformed_img = my_transforms(image)
     batch_tensor = transformed_img.unsqueeze(0)
     return batch_tensor
+# def transform_image(img):
+#     my_transforms = transforms.Compose([
+#         transforms.Resize((256, 256)),
+#         transforms.ToTensor(),
+#         transforms.Normalize((0.5,), (0.5,))
+#     ])
 
-@app.route('/mode/views/upload', methods=['POST'])
+#     image = Image.open(img).convert('RGB')
+#     transformed_img = my_transforms(image)
+#     batch_tensor = transformed_img.unsqueeze(0)
+#     return batch_tensor
+
+@app.route('/model/views/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file'}), 400
@@ -40,8 +52,10 @@ def upload_file():
         "taco": ["Tortillas", "Beef", "Cheese", "Lettuce", "Tomato"]
     }
     print("image opened")
-    image = Image.open(BytesIO(file.read()))
-    transformed_image = transform_image(image)
+    img_stream = BytesIO(file.read())  # Create a BytesIO stream from the uploaded file
+    transformed_image = transform_image(img_stream)
+    # image = Image.open(BytesIO(file.read()))
+    # transformed_image = transform_image(image)
     prediction = model(transformed_image)
 
     predicted_label_idx = torch.argmax(prediction, dim=1).item()
