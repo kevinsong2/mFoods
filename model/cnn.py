@@ -14,14 +14,19 @@ np.random.seed(42)
 vgg11 = models.vgg16(preTrained=True).eval()
 
 
-def preporcess_image(image_path):
+def preprocess_image(image_path):
     # TODO
-    image =     return image
+    image = Image.open(image_path)
+    return image
 
 
 def predict(image_path, model):
     image = preprocess_image(image_path)
-    outputs = model(image)
+    with model.no_grad:
+        outputs = model(image)
+    return outputs
+
+
 
 
 
