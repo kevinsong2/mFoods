@@ -67,6 +67,18 @@ form{
     
 }
 
+#recentVW{
+    color: black;
+    font-family: Inter;
+    font-size: 35px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    
+}
+
+
 /* DELETE AT THE END: GRID */
 .horizontal-line, .vertical-line {
     position: fixed;

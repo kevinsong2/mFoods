@@ -65,17 +65,17 @@ def test_model(model, test_loader):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-    accuracy = 100 * correct / total
+    accuracy = 100 * (correct / total)
     print(f'Accuracy of the model on test images: {accuracy}%')
 
 if __name__ == "__main__":
     train_data_dir = './app/static/train-data'
-    # test_data_dir = './app/static/test-data'
+    test_data_dir = './app/static/test-data'
     num_classes = 3 # Update this based on your dataset
 
     train_dataloader = load_data(train_data_dir, train=True)
-    # test_dataloader = load_data(test_data_dir, train=False)
+    test_dataloader = load_data(test_data_dir, train=False)
 
     model = build_model(num_classes)
     train_model(model, train_dataloader)
-    test_model(model, train_dataloader)
+    test_model(model, test_dataloader)
